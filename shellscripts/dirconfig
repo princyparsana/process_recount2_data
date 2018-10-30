@@ -1,0 +1,8 @@
+homeDir=`pwd | sed -e 's/\/shellscripts//g'`
+scriptDir=$homeDir/src
+datDir=$homeDir/data
+logDir=$homeDir/log
+
+mkdir $datDir
+mkdir $logDir
+
