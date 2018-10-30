@@ -9,6 +9,10 @@ select.genes <- function(rse.object, threshold, ...){
 }
 
 ###########################################
+library(recount)
+dir.create("/work-zfs/abattle4/parsana/recount_networks/data/raw/")
+dir.create("/work-zfs/abattle4/parsana/recount_networks/data/auc_scaled/")
+dir.create("/work-zfs/abattle4/parsana/recount_networks/data/rpkm/")
 
 pc.genes <- read.delim("/work-zfs/abattle4/parsana/networks_correction/data/etc/protein_coding.txt", 
 header = F, stringsAsFactors = F)
@@ -19,16 +23,33 @@ overlapping_genes <- read.delim("/work-zfs/abattle4/parsana/networks_correction/
 
 
 studies_interest <- c("sra", "TCGA", "SRP012682")
-sapply(studies_interest, download_study)
+sapply(studies_interest, function(eachstudy){
+	download_study(eachstudy, outdir = paste("raw/", eachstudy, sep = ""))
+	})
+
 sapply(studies_interest, function(eachstudy, pc_genes, ov_genes){
-        load(file.path(eachstudy, "rse_gene.Rdata"))
+        load(file.path(paste("raw/", eachstudy, sep = ""), "rse_gene.Rdata"))
         rse_gene <- scale_counts(rse_gene, by = "auc", round = FALSE)
         rse_gene <- select.genes(rse_gene, threshold = 0.1)
         rse_gene <- rse_gene[rownames(rse_gene) %in% pc_genes,]
         rse_gene <- rse_gene[!rownames(rse_gene) %in% ov_genes,]
         counts <- SummarizedExperiment::assay(rse_gene, 1)
         SummarizedExperiment::assay(rse_gene, 1) <- log2(counts+2)
-        saveRDS(rse_gene, file = paste("/work-zfs/abattle4/parsana/recount_networks/data/", eachstudy,".Rds", sep = ""))
+        saveRDS(rse_gene, file = paste("/work-zfs/abattle4/parsana/recount_networks/data/auc_scaled/", eachstudy,".Rds", sep = ""))
+        }, pc.genes, overlapping_genes$x)
+
+
+## compute rpkm
+sapply(studies_interest, function(eachstudy, pc_genes, ov_genes){
+        load(file.path(paste("raw/", eachstudy, sep = ""), "rse_gene.Rdata"))
+        rse_rpkm <- getRPKM(rse_gene, length_var = "bp_length", mapped_var = NULL)
+	SummarizedExperiment::assay(rse_gene, 1) <- rse_rpkm
+        rse_gene <- select.genes(rse_gene, threshold = 0.1)
+        rse_gene <- rse_gene[rownames(rse_gene) %in% pc_genes,]
+        rse_gene <- rse_gene[!rownames(rse_gene) %in% ov_genes,]
+        counts <- SummarizedExperiment::assay(rse_gene, 1)
+        SummarizedExperiment::assay(rse_gene, 1) <- log2(counts+2)
+        saveRDS(rse_gene, file = paste("/work-zfs/abattle4/parsana/recount_networks/data/rpkm/", eachstudy,".Rds", sep = ""))
         }, pc.genes, overlapping_genes$x)
 
 
