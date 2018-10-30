@@ -1,24 +1,3 @@
-                                                      sra 
-      "http://duffel.rail.bio/recount/sra/rse_gene.Rdata" 
-                                                     TCGA 
-     "http://duffel.rail.bio/recount/TCGA/rse_gene.Rdata" 
-                                                SRP012682 
-"http://duffel.rail.bio/recount/SRP012682/rse_gene.Rdata" 
-$sra
-NULL
-
-$TCGA
-NULL
-
-$SRP012682
-NULL
-
-$sra
-NULL
-
-$TCGA
-NULL
-
-$SRP012682
-NULL
-
+[1] "/work-zfs/abattle4/parsana/recount_networks/data/raw"       
+[2] "/work-zfs/abattle4/parsana/recount_networks/data/auc_scaled"
+[3] "/work-zfs/abattle4/parsana/recount_networks/data/rpkm"      
