@@ -1,8 +1,3 @@
-#!/bin/sh
-#SBATCH --time=1:0:0
-#SBATCH --mem=40G
-#SBATCH --partition=debug
-
 homeDir=`pwd | sed -e 's/\/shellscripts//g'`
 scriptDir=$homeDir/src
 datDir=$homeDir/data
