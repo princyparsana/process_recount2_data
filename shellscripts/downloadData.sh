@@ -15,3 +15,4 @@ mkdir $raw
 
 cd $datDir
 Rscript $srcDir/downloadData.R $raw $auc $rpkm >$logDir/downloadData.log
+Rscript $srcDir/processing_smallrna_replicates.R >$logDir/process_smallrna_replicates.log
