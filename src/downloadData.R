@@ -10,9 +10,9 @@ select.genes <- function(rse.object, threshold, ...){
 
 ###########################################
 library(recount)
-#dir.create("/work-zfs/abattle4/parsana/recount_networks/data/raw/")
-#dir.create("/work-zfs/abattle4/parsana/recount_networks/data/auc_scaled/")
-#dir.create("/work-zfs/abattle4/parsana/recount_networks/data/rpkm/")
+#dir.create("/work-zfs/abattle4/parsana/process_recount2_data/data/raw/")
+#dir.create("/work-zfs/abattle4/parsana/process_recount2_data/data/auc_scaled/")
+#dir.create("/work-zfs/abattle4/parsana/process_recount2_data/data/rpkm/")
 dNames <- commandArgs(TRUE)
 print(dNames)
 rawDir <- dNames[1]
@@ -39,7 +39,7 @@ sapply(studies_interest, function(eachstudy, pc_genes, ov_genes, dirName){
         rse_gene <- rse_gene[rownames(rse_gene) %in% pc_genes,]
         rse_gene <- rse_gene[!rownames(rse_gene) %in% ov_genes,]
         counts <- SummarizedExperiment::assay(rse_gene, 1)
-        SummarizedExperiment::assay(rse_gene, 1) <- log2(counts+2)
+        SummarizedExperiment::assay(rse_gene, 1) <- log2(counts+1)
         saveRDS(rse_gene, file = paste(dirName, "/", eachstudy,".Rds", sep = ""))
         }, pc.genes, overlapping_genes$x, aucDir)
 
@@ -53,7 +53,7 @@ sapply(studies_interest, function(eachstudy, pc_genes, ov_genes, dirName){
         rse_gene <- rse_gene[rownames(rse_gene) %in% pc_genes,]
         rse_gene <- rse_gene[!rownames(rse_gene) %in% ov_genes,]
         counts <- SummarizedExperiment::assay(rse_gene, 1)
-        SummarizedExperiment::assay(rse_gene, 1) <- log2(counts+2)
+        SummarizedExperiment::assay(rse_gene, 1) <- log2(counts+1)
         saveRDS(rse_gene, file = paste(dirName, "/", eachstudy,".Rds", sep = ""))
         }, pc.genes, overlapping_genes$x, rpkmDir)
 
