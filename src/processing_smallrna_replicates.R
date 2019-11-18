@@ -3,9 +3,9 @@
 # dirName <- inputargs[1]
 #rawExp <- inputargs[2]
 # saveDir <- inputargs[3]
-dirName <- "/work-zfs/abattle4/parsana/recount_networks/data/sra_metadata/"
-rawExp <- "/work-zfs/abattle4/parsana/recount_networks/data/rpkm/sra.Rds"
-saveDir <- "/work-zfs/abattle4/parsana/recount_networks/data/replicates_merged_sra/"
+dirName <- "/work-zfs/abattle4/parsana/process_recount2_data/data/sra_metadata/"
+rawExp <- "/work-zfs/abattle4/parsana/process_recount2_data/data/rpkm/sra.Rds"
+saveDir <- "/work-zfs/abattle4/parsana/process_recount2_data/data/replicates_merged_sra/"
 dir.create(saveDir)
 
 library(SRAdb)
@@ -16,7 +16,7 @@ runids <- rse_gene$run # get run ids
 
 # get corresponding metadata from SRAdb
 dbFilename <- paste(dirName, "SRAmetadb.sqlite", sep = "")
-sqlfile <- getSRAdbFile(, destfile = paste(dbFilename, ".gz", sep = ""))
+#sqlfile <- getSRAdbFile(, destfile = paste(dbFilename, ".gz", sep = "")) ## not working on marcc right now, using the previously downloaded version of db
 sra_con <- dbConnect(SQLite(),dbFilename)
 res <- dbGetQuery(sra_con, paste("select * from sra where run_accession in ('",paste(runids, collapse = "','"),"')", sep = ""))
 
@@ -56,5 +56,14 @@ each_study_count <- lapply(each_study_count, function(this_study){
 })
 
 names(each_study_count) <- studies
+
+## Exclude samples with more than 50% of genes with 0 expression value
+total_genes = ncol(each_study_count[[1]])
+
+prop_genes_notexp = lapply(each_study_count, function(x) apply(x, 1, function(y) (sum(y<=0)/total_genes)<0.5))
+
+each_study_count = mapply(function(x,y){
+  x[y,]
+}, each_study_count, prop_genes_notexp, SIMPLIFY = FALSE)
 
 saveRDS(each_study_count, file = paste(saveDir,"rpkm_replicates_merged.Rds", sep = ""))
