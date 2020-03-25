@@ -1,0 +1,27 @@
+[1] "/work-zfs/abattle4/parsana/process_recount2_data/data/raw"       
+[2] "/work-zfs/abattle4/parsana/process_recount2_data/data/auc_scaled"
+[3] "/work-zfs/abattle4/parsana/process_recount2_data/data/rpkm"      
+                                                         sra 
+      "http://duffel.rail.bio/recount/v2/sra/rse_gene.Rdata" 
+                                                        TCGA 
+     "http://duffel.rail.bio/recount/v2/TCGA/rse_gene.Rdata" 
+                                                   SRP012682 
+"http://duffel.rail.bio/recount/v2/SRP012682/rse_gene.Rdata" 
+$sra
+NULL
+
+$TCGA
+NULL
+
+$SRP012682
+NULL
+
+$sra
+NULL
+
+$TCGA
+NULL
+
+$SRP012682
+NULL
+

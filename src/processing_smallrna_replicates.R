@@ -60,7 +60,7 @@ names(each_study_count) <- studies
 ## Exclude samples with more than 50% of genes with 0 expression value
 total_genes = ncol(each_study_count[[1]])
 
-prop_genes_notexp = lapply(each_study_count, function(x) apply(x, 1, function(y) (sum(y<=0)/total_genes)<0.5))
+prop_genes_notexp = lapply(each_study_count, function(x) apply(x, 1, function(y) (sum(y<=0.5)/total_genes)<0.5))
 
 each_study_count = mapply(function(x,y){
   x[y,]
