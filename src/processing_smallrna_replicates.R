@@ -109,7 +109,7 @@ saveRDS(sample_metadata, paste0(saveDir, "sample_metadata.rds"))
 saveRDS(gene_data, paste0(saveDir, "gene_data.rds"))
 
 # Read in projects to be excluded 
-projects.excl <- readRDS(paste0(datDir, "projects_excluded.rds"))
+projects.excl <- readRDS(paste0(datDir, "../projects_excluded.rds"))
 sample_metadata <- sample_metadata[!sample_metadata$project %in% projects.excl$accession, ]
 sample.size <- table(sample_metadata$project)
 small_projects <- names(sample.size)[sample.size < 30]
