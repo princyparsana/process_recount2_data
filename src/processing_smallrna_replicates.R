@@ -1,10 +1,28 @@
 rm(list= ls())
 
-dirName <- "/work-zfs/abattle4/prashanthi/consensus_networks/data/sra_metadata/"
-rawExp <- "/work-zfs/abattle4/prashanthi/consensus_networks/data/rpkm/sra.Rds"
-saveDir <- "/work-zfs/abattle4/prashanthi/consensus_networks/data/rpkm/"
-datDir <- "/work-zfs/abattle4/prashanthi/consensus_networks/data/"
+#dirName <- "/work-zfs/abattle4/prashanthi/consensus_networks/data/sra_metadata/"
+#rawExp <- "/work-zfs/abattle4/prashanthi/consensus_networks/data/rpkm/sra.Rds"
+#saveDir <- "/work-zfs/abattle4/prashanthi/consensus_networks/data/rpkm/"
+#datDir <- "/work-zfs/abattle4/prashanthi/consensus_networks/data/"
+#dir.create(dirName)
+################################################################################################################################
+## Get inputargs
+inputArgs <- commandArgs(TRUE)
+dirName <- inputArgs[1]
+rawExp <- inputArgs[2]
+datDir <- inputArgs[3]
+saveDir <- inputArgs[4]
+
+## Create directories
 dir.create(dirName)
+## processed recountDir
+processed_recountDir <- paste0(datDir, "/expr_data/recount/") 
+dir.create(processed_recountDir)
+## processed gtexDir
+processed_gtexDir <- paste0(datDir, "/expr_data/GTEx/")
+dir.create(processed_gtexDir)
+
+################################################################################################################################
 
 library(SRAdb)
 library(dplyr)
@@ -66,7 +84,7 @@ each_study_count = mapply(function(x,y){
   x[y,]
 }, each_study_count, prop_genes_notexp, SIMPLIFY = FALSE)
 
-saveRDS(each_study_count, file = paste(saveDir,"rpkm_replicates_merged.Rds", sep = ""))
+saveRDS(each_study_count, file = paste(datDir,"/replicates_merged_sra/rpkm_replicates_merged.Rds", sep = ""))
 
 ## Merge the replicates to get one single matrix 
 expr.recount <- ldply(each_study_count, data.frame)
@@ -119,12 +137,13 @@ expr.recount <- expr.recount[rownames(expr.recount) %in% gene_data$gene_id, ]
 expr.recount <- expr.recount[match(gene_data$gene_id, rownames(expr.recount)), ]
 rownames(expr.recount) <- gene_data$gene_symbol
 
-saveRDS(expr.recount, "/work-zfs/abattle4/prashanthi/consensus_networks/data/expr_data/recount/expr_recount.rds")
-saveRDS(sample_metadata, "/work-zfs/abattle4/prashanthi/consensus_networks/data/expr_data/recount/sample_metadata.rds")
-saveRDS(gene_data, "/work-zfs/abattle4/prashanthi/consensus_networks/data/expr_data/recount/gene_data.rds")
+
+saveRDS(expr.recount, paste0(processed_recountDir,"/expr_recount.rds"))
+saveRDS(sample_metadata, paste0(processed_recountDir,"/sample_metadata.rds"))
+saveRDS(gene_data, paste0(processed_recountDir,"/gene_data.rds"))
 
 # Read in GTEx data
-GTEx <- readRDS("/work-zfs/abattle4/prashanthi/consensus_networks/data/rpkm/SRP012682.Rds")
+GTEx <- readRDS(paste0(datDir,"/rpkm/SRP012682.Rds"))
 expr.gtex <- as.data.frame(GTEx@assays@data$counts)
 sample_metadata.gtex <- data.frame(colData(GTEx))
 gene_data.gtex <- data.frame(rowData(GTEx))
@@ -152,7 +171,7 @@ expr.gtex <- expr.gtex[rownames(expr.gtex) %in% gene_data.gtex$gene_id, ]
 expr.gtex <- expr.gtex[match(gene_data.gtex$gene_id, rownames(expr.gtex)), ]
 rownames(expr.gtex) <- gene_data.gtex$gene_symbol
 
-saveRDS(expr.gtex, "/work-zfs/abattle4/prashanthi/consensus_networks/data/expr_data/GTEx/expr_gtex.rds")
-saveRDS(sample_metadata.gtex, "/work-zfs/abattle4/prashanthi/consensus_networks/data/expr_data/GTEx/sample_metadata.rds")
-saveRDS(gene_data.gtex, "/work-zfs/abattle4/prashanthi/consensus_networks/data/expr_data/GTEx/gene_data.rds")
+saveRDS(expr.gtex, paste0(processed_gtexDir,"/expr_gtex.rds"))
+saveRDS(sample_metadata.gtex, paste0(processed_gtexDir,"/sample_metadata.rds"))
+saveRDS(gene_data.gtex, paste0(processed_gtexDir,"gene_data.rds"))
 
