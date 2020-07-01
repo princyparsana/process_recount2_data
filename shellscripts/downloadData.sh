@@ -34,4 +34,4 @@ mkdir $datDir/automated_process_output/
 cp $datDir/replicates_merged_sra/rpkm_replicates_merged.Rds $datDir/automated_process_output/sra.Rds
 cp $rpkm/SRP012682.Rds $datDir/automated_process_output/gtex.Rds
 cp $rpkm/TCGA.Rds $datDir/automated_process_output/tcga.Rds
-
+Rscript $srcDir/process_tcga.R
