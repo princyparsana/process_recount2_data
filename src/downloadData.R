@@ -53,6 +53,6 @@ sapply(studies_interest, function(eachstudy, pc_genes, ov_genes, dirName){
   rse_gene <- rse_gene[rownames(rse_gene) %in% pc_genes,]
   rse_gene <- rse_gene[!rownames(rse_gene) %in% ov_genes,]
   counts <- SummarizedExperiment::assay(rse_gene, 1)
-  SummarizedExperiment::assay(rse_gene, 1) <- log2(counts+1)
+  SummarizedExperiment::assay(rse_gene, 1) <- limma::normalizeQuantiles(log2(counts+1))
   saveRDS(rse_gene, file = paste(dirName, "/", eachstudy,".Rds", sep = ""))
 }, pc.genes, overlapping_genes$x, rpkmDir)
