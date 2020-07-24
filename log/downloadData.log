@@ -1,6 +1,6 @@
-[1] "/work-zfs/abattle4/parsana/process_recount2_data/data/raw/"       
-[2] "/work-zfs/abattle4/parsana/process_recount2_data/data/auc_scaled/"
-[3] "/work-zfs/abattle4/parsana/process_recount2_data/data/rpkm/"      
+[1] "/work-zfs/abattle4/prashanthi/princy_preprocessing/process_recount2_data/data/raw/"       
+[2] "/work-zfs/abattle4/prashanthi/princy_preprocessing/process_recount2_data/data/auc_scaled/"
+[3] "/work-zfs/abattle4/prashanthi/princy_preprocessing/process_recount2_data/data/rpkm/"      
                                                          sra 
       "http://duffel.rail.bio/recount/v2/sra/rse_gene.Rdata" 
                                                         TCGA 

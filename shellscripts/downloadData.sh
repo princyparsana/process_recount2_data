@@ -4,10 +4,12 @@
 #SBATCH --partition=lrgmem
 #SBATCH --mem-per-cpu=200G
 #SBATCH --mail-type=end
-#SBATCH --mail-user=pparsan1@jhu.edu
+#SBATCH --mail-user=pravich2@jhu.edu
 
+module load R/3.6.1
+module load gcc/5.5.0
 
-cd /work-zfs/abattle4/parsana/process_recount2_data/shellscripts/
+cd /work-zfs/abattle4/prashanthi/princy_preprocessing/process_recount2_data/shellscripts/
 homeDir=`pwd | sed -e 's/\/shellscripts//g'`
 echo $homeDir
 scriptDir=$homeDir/src/
@@ -34,4 +36,4 @@ mkdir $datDir/automated_process_output/
 cp $datDir/replicates_merged_sra/rpkm_replicates_merged.Rds $datDir/automated_process_output/sra.Rds
 cp $rpkm/SRP012682.Rds $datDir/automated_process_output/gtex.Rds
 cp $rpkm/TCGA.Rds $datDir/automated_process_output/tcga.Rds
-Rscript $srcDir/process_tcga.R
+Rscript $srcDir/process_tcga.R $datDir/automated_process_output $datDir/expr_data
